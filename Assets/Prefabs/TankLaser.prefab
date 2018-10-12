@@ -113,7 +113,7 @@ GameObject:
   - component: {fileID: 114145329166945330}
   m_Layer: 0
   m_Name: TankLaser
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -997,10 +997,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   BulletPrefab: {fileID: 1868044754807370, guid: c9ba3455bb3989044a21156f706d3d86,
     type: 2}
-  BulletSpwanPoint1: {fileID: 4662797925964442}
-  BulletSpwanPoint2: {fileID: 4907156894931972}
-  Bullet1Force: 400
-  Bullet2Force: 400
+  BulletSpwanPoint: {fileID: 4662797925964442}
+  BulletForce: 400
+  DamageBuffer: 0
+  IsBufferOn: 0
+  BulletSpwanPointSecond: {fileID: 4907156894931972}
 --- !u!114 &114217078425193302
 MonoBehaviour:
   m_ObjectHideFlags: 1

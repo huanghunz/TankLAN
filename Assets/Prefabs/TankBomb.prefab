@@ -1027,11 +1027,11 @@ GameObject:
   - component: {fileID: 54829808219270022}
   - component: {fileID: 65930390412842968}
   - component: {fileID: 114387896904008516}
-  - component: {fileID: 114286682990018152}
   - component: {fileID: 114975389204148534}
+  - component: {fileID: 114015797632767848}
   m_Layer: 0
   m_Name: TankBomb
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -6095,7 +6095,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1.69, y: 1.89, z: 2.59}
   m_Center: {x: 0.04, y: 0.92, z: 0.18}
---- !u!114 &114286682990018152
+--- !u!114 &114015797632767848
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
@@ -6103,13 +6103,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 1660241916328744}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8c2d3e9ce3ea1a94e97c3c3d36d08c61, type: 3}
+  m_Script: {fileID: 11500000, guid: 6fecc2fe7b71b6f4184c9023f726db89, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   BulletPrefab: {fileID: 1648455024147990, guid: 65bf2a69afe184440acb5b10450d7c41,
     type: 2}
   BulletSpwanPoint: {fileID: 4768556478102004}
   BulletForce: 400
+  DamageBuffer: 0
+  IsBufferOn: 0
 --- !u!114 &114387896904008516
 MonoBehaviour:
   m_ObjectHideFlags: 1

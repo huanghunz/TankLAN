@@ -90,11 +90,11 @@ GameObject:
   - component: {fileID: 54183874524093680}
   - component: {fileID: 65809786641265472}
   - component: {fileID: 114015436842379810}
-  - component: {fileID: 114967129684270468}
   - component: {fileID: 114169751232887042}
+  - component: {fileID: 114113153457638674}
   m_Layer: 0
   m_Name: TankPrefab
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -565,6 +565,23 @@ MonoBehaviour:
   PlayerName: Player
   PlayerColour: '#ffffff'
   HealthValue: 100
+--- !u!114 &114113153457638674
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1643505634966138}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6fecc2fe7b71b6f4184c9023f726db89, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  BulletPrefab: {fileID: 1421101798180214, guid: 10c22a2a09a6140cdb92258a3daa5f47,
+    type: 2}
+  BulletSpwanPoint: {fileID: 4320926860477288}
+  BulletForce: 400
+  DamageBuffer: 0
+  IsBufferOn: 0
 --- !u!114 &114169751232887042
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -629,18 +646,3 @@ MonoBehaviour:
     i15: 190
   m_ServerOnly: 0
   m_LocalPlayerAuthority: 1
---- !u!114 &114967129684270468
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1643505634966138}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8c2d3e9ce3ea1a94e97c3c3d36d08c61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  BulletPrefab: {fileID: 1421101798180214, guid: 10c22a2a09a6140cdb92258a3daa5f47,
-    type: 2}
-  BulletSpwanPoint: {fileID: 4320926860477288}
-  BulletForce: 400

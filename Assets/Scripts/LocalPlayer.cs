@@ -3,18 +3,25 @@ using System.Collections;
 using UnityEngine.Networking;
 using UnityEngine.UI;
 
-using MyMaze;
-
 public class LocalPlayer : NetworkBehaviour {
+
+    public bool IsVisible
+    {
+        get;
+        private set;
+    }
+
+    public float InvisibleTimer
+    {
+        get;
+        set;
+    }
 
 	public Text NamePrefab;
 	public Transform NamePos;
 
     public Slider HealthPrefab;
-
     public GameObject Explosion;
-
-    private Vector3 _playerSpawnPostion;
     
 
 	private string _textboxname = "";
@@ -22,8 +29,11 @@ public class LocalPlayer : NetworkBehaviour {
     private Text _nameLabel;
     private Slider _healthBar;
     private GameObject _playerModel;
+    private MeshRenderer[] _renderers;
 
     private bool _isPlayerSpawned;
+
+
     
 
     [SyncVar (hook = "OnChangeName")]
@@ -38,7 +48,6 @@ public class LocalPlayer : NetworkBehaviour {
     [Command]
     public void CmdChangeName(string newName)
     {
-        Debug.Log("cmd change name");
         PlayerName = newName;
         _nameLabel.text = PlayerName;
     }
@@ -47,12 +56,10 @@ public class LocalPlayer : NetworkBehaviour {
     public void CmdChangeColour(string newColour)
     {
         PlayerColour = newColour;
-        Renderer[] rends = GetComponentsInChildren<Renderer>();
-
-        foreach (Renderer r in rends)
+        
+        foreach (Renderer r in _renderers)
         {
-            if (r.gameObject.name == "BODY")
-                r.material.SetColor("_Color", ColorFromHex(PlayerColour));
+            r.material.SetColor("_Color", ColorFromHex(PlayerColour));
         }
     }
 
@@ -62,7 +69,7 @@ public class LocalPlayer : NetworkBehaviour {
         HealthValue += hitValue;
         _healthBar.value = HealthValue;
 
-        if (_healthBar.value == 0)
+        if (_healthBar.value <= 0)
         {
             GameObject e = Instantiate(this.Explosion, this.transform.position, Quaternion.identity);
             NetworkServer.Spawn(e);
@@ -77,30 +84,13 @@ public class LocalPlayer : NetworkBehaviour {
     public void RpcRespawn()
     {
         if (!isLocalPlayer) return;
-        this.transform.position = _playerSpawnPostion;
+        this.transform.position = GameController.GetUniqueSpawnPosition();
     }
-
-
-    [Command]
-    public void CmdGetMazeStatus()
-    {
-        this.RpcCheckMazeState(GameController.IsMazeReady);
-    }
-
-    [ClientRpc]
-    public void RpcCheckMazeState(bool isReady)
-    {
-        if (isReady)
-        {
-            GameController.InitialStatus();
-            this.transform.position = GameController.GetUniqueSpawnPosition();
-            _playerSpawnPostion = this.transform.position;
-        }
-    }
+    
 
     public void AddDamage(int damage)
     {
-        this.CmdChangeHealth(-5);
+        this.CmdChangeHealth(damage);
     }
 
     private void OnPropertyChange()
@@ -118,7 +108,7 @@ public class LocalPlayer : NetworkBehaviour {
 
     void OnChangeName (string n)
     {
-        Debug.Log("trigger hook change name");
+       // Debug.Log("trigger hook change name");
         PlayerName = n;
 		_nameLabel.text = PlayerName;
     }
@@ -181,22 +171,25 @@ public class LocalPlayer : NetworkBehaviour {
             CameraFollow360.player = this.gameObject.transform;
             
             this.transform.position = GameController.GetUniqueSpawnPosition();
-            _playerSpawnPostion = this.transform.position;
         }
         else
         {
             this.SetVisibility(true);
         }
 
-        Debug.Log("Manual hook change name");
+      //  Debug.Log("Manual hook change name");
         this.OnPropertyChange();
     }
 
-    private void SetVisibility(bool visible)
+    public void SetVisibility(bool visible)
     {
-        _playerModel.SetActive(visible);
+        this.IsVisible = visible;
+        //_playerModel.SetActive(visible);
         _nameLabel.gameObject.SetActive(visible);
         _healthBar.gameObject.SetActive(visible);
+
+        TankUtility.Utility.Instance.
+            AnimateAlpha(_renderers, visible ? 1 : 0, 0.5f);
     }
 
     private void SetControllability(bool control)
@@ -207,13 +200,17 @@ public class LocalPlayer : NetworkBehaviour {
     void Awake()
     {
         _playerModel = transform.Find("Model").gameObject;
-
+        Debug.Assert(_playerModel != null, "Fail to find object called 'Model'");
+        _renderers = _playerModel.GetComponentsInChildren<MeshRenderer>();
+        if (_renderers == null) Debug.Log("null r");
         // All UI should be a child of a canvas
         GameObject canvas = GameObject.FindWithTag("MainCanvas");
         _nameLabel = Instantiate(NamePrefab, Vector3.zero, Quaternion.identity) as Text;
         _nameLabel.transform.SetParent(canvas.transform);
         _healthBar = Instantiate(HealthPrefab, Vector3.zero, Quaternion.identity) as Slider;
         _healthBar.transform.SetParent(canvas.transform);
+
+        _playerModel.SetActive(false);
 
         this.SetVisibility(false);
         this.SetControllability(false);
@@ -241,21 +238,15 @@ public class LocalPlayer : NetworkBehaviour {
         if (!_isPlayerSpawned && GameController.IsMazeReady)
         {
             _isPlayerSpawned = true;
+            _playerModel.SetActive(true);
             this.SetupPlayer();
         }
-        //Debug.Log("ready?: " + GameController.IsMazeReady);
-        //if (!GameController.IsMazeReady)
-        //{
-        //    this.CmdGetMazeStatus();
-        //}
 
-        //if (GameController.IsMazeReady && GameObject.Find("Model").gameObject.)
-        //{
-        //    GetComponent<PlayerController>().enabled = true;
-        //    GameObject.Find("Model").gameObject.SetActive(true);
-        //    CameraFollow360.player = this.gameObject.transform;
-            
-        //}
+        if (this.InvisibleTimer > 0)
+        {
+            this.InvisibleTimer -= Time.deltaTime;
+            this.SetVisibility(false);
+        }
 
         //determine if the object is inside the camera's viewing volume
         if (_nameLabel != null)

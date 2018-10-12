@@ -60,11 +60,11 @@ public class SetupMaze : MonoBehaviour {
     {
         float t = 0;
         Vector3 finalScale = Vector3.one * this.FinalScale;
-        while (t < 1f)
+        while (t < 0.5f)
         {
             t += Time.deltaTime;
 
-            this.transform.localScale = Vector3.Lerp(this.transform.localScale, finalScale, t);
+            this.transform.localScale = Vector3.Lerp(this.transform.localScale, finalScale, t * 2f);
 
             yield return new WaitForEndOfFrame();
         }

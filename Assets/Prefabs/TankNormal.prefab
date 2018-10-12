@@ -56,11 +56,11 @@ GameObject:
   - component: {fileID: 54744318414244072}
   - component: {fileID: 65450468281893568}
   - component: {fileID: 114211431252385322}
-  - component: {fileID: 114607029239605946}
   - component: {fileID: 114092877367242098}
+  - component: {fileID: 114442663351059808}
   m_Layer: 0
   m_Name: TankNormal
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -379,7 +379,7 @@ MonoBehaviour:
   PlayerName: Player
   PlayerColour: '#ffffff'
   HealthValue: 100
---- !u!114 &114607029239605946
+--- !u!114 &114442663351059808
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
@@ -387,13 +387,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 1532314120750778}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8c2d3e9ce3ea1a94e97c3c3d36d08c61, type: 3}
+  m_Script: {fileID: 11500000, guid: 6fecc2fe7b71b6f4184c9023f726db89, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   BulletPrefab: {fileID: 1666543521493616, guid: 1d953dcf9477cfb4eb363d694d8c40f7,
     type: 2}
   BulletSpwanPoint: {fileID: 4144845201341734}
   BulletForce: 1000
+  DamageBuffer: 0
+  IsBufferOn: 0
 --- !u!114 &114890263524974006
 MonoBehaviour:
   m_ObjectHideFlags: 1

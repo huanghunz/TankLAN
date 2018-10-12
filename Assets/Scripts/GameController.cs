@@ -5,19 +5,16 @@ using UnityEngine.Networking;
 
 public class GameController : NetworkBehaviour {
 
-    
     public static bool IsMazeReady
     {
         get
         {
             return s_isMazeReady;
         }
-        //ivate set;
     }
     
     private static List<Vector3> s_spawnPositions;
     private static bool s_isMazeReady = false;
-
 
     private SetupMaze _maze;
     private PowerUp _powerUpItems;
@@ -37,7 +34,6 @@ public class GameController : NetworkBehaviour {
 
     public override void OnStartServer()
     {
-        Debug.Log("OnStartServer OnStartServer");
         if (isServer)
         {
             _maze = FindObjectOfType<SetupMaze>();
@@ -47,30 +43,21 @@ public class GameController : NetworkBehaviour {
                 _maze.OnFinishGeneration += this.OnMazeReady;
             }
         }
-        if (isLocalPlayer)
-        {
-            Debug.Log("start server is local player");
-        }
     }
 
     public override void OnStartClient()
     {
         if (isServer)
         {
-            Debug.Log("is server on game control");
             return;
         }
 
         InitialStatus();
-        Debug.Log("start client");
         _maze = FindObjectOfType<SetupMaze>();
-        //_maze.transform.localScale = Vector3.one;
-        //var mazeInstance = FindObjectOfType<MyMaze.Maze>();
         var mazeParts = GameObject.FindGameObjectsWithTag("MazeComponent");
        
         if (mazeParts == null)
         {
-            Debug.Log("null maze parts");
             return;
         }
 
@@ -78,9 +65,6 @@ public class GameController : NetworkBehaviour {
         {
             mp.transform.localScale = Vector3.one * _maze.FinalScale;
         }
-
-       // mazeInstance.transform.SetParent(_maze.transform);
-      //  _maze.transform.localScale = Vector3.one * _maze.FinalScale;
     }
 
     public override void OnStartLocalPlayer()
