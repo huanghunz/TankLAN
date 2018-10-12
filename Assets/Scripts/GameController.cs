@@ -85,7 +85,9 @@ public class GameController : NetworkBehaviour {
         InitialStatus();
 
         _powerUpItems = FindObjectOfType<PowerUp>();
-        _powerUpItems.SpawnPowerupItems();
+
+        int numPowerUp = Mathf.FloorToInt(_maze.Size.x * _maze.Size.z / 3f);
+        _powerUpItems.SpawnPowerupItems(numPowerUp);
     }
 
     public static void InitialStatus()

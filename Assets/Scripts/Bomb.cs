@@ -5,7 +5,6 @@ using System;
 using UnityEngine.Networking;
 
 public class Bomb : BulletBase {
-
     
     public GameObject BombEffect;
    
@@ -18,18 +17,21 @@ public class Bomb : BulletBase {
     {
         Debug.Assert(this.BombEffect != null, "Please assign bomb effect object.");
 
-        //_bombEffect = Instantiate(this.BombEffect, this.BombEffectPos.position, Quaternion.identity);
-        //_bombEffect.transform.parent = this.BombEffectPos;
-        //NetworkServer.Spawn(_bombEffect);
-
         _playerInRange = new List<GameObject>();
         Transform range = this.transform.Find("BombRange");
         Debug.Assert(range != null, "Fail to find object of name 'BombRange'");
         _bombRange = range.GetComponent<MeshRenderer>();
 
-        StartCoroutine(this.UpdateRange(_exposeTime, Vector3.one * 4f));
 
-        Invoke("Expose", _exposeTime);
+        TankUtility.Utility.Instance.AnimateScale(this.gameObject, Vector3.one * 4f, _exposeTime, delegate
+        {
+            this.Expose();
+        });
+
+        TankUtility.Utility.Instance.AnimateAlpha(_bombRange, 0.5f, _exposeTime);
+        //StartCoroutine(this.UpdateRange(_exposeTime, Vector3.one * 4f));
+
+        //Invoke("Expose", _exposeTime);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -50,24 +52,22 @@ public class Bomb : BulletBase {
         GameObject e = Instantiate(this.Explosion, this.transform.position, Quaternion.identity);
         e.AddComponent<NetworkIdentity>();
         e.AddComponent<NetworkTransform>();
-       // NetworkServer.Spawn(e);
 
         foreach(GameObject player in _playerInRange)
         {
             Vector3 force = player.transform.position - this.transform.position;
-            player.GetComponent<Rigidbody>().AddForce(force.normalized * 2000f);
+            player.GetComponent<Rigidbody>().AddForce(force.normalized * 1500f);
             player.GetComponent<LocalPlayer>().AddDamage(-this.BulletDamage);
         }
 
         Destroy(this.gameObject, 0.1f);
         Destroy(e, 2f);
     }
-    
 
     private IEnumerator UpdateRange(float time, Vector3 targetScale)
     {
         float timeStep = 0;
-        while (timeStep < 1)
+        while (timeStep < time)
         {
             timeStep += Time.deltaTime/time;
             Color oldColor = _bombRange.material.color;

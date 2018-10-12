@@ -1,12 +1,13 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PowerUpItem : MonoBehaviour {
 
     public delegate void TriggerEntered(GameObject go, Types type);
     public event TriggerEntered OnTriggerEntered;
+
+    public delegate void DestroySelf(PowerUpItem item);
+    public event DestroySelf OnDestorySelf;
 
     public enum Types
     {
@@ -20,8 +21,6 @@ public class PowerUpItem : MonoBehaviour {
 
     public Types PowerUpType;
 
-    private bool _isTriggered;
-
     private void Awake()
     {
         if (PowerUpVisial.Length != Enum.GetNames(typeof(PowerUpItem.Types)).Length)
@@ -32,9 +31,7 @@ public class PowerUpItem : MonoBehaviour {
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag != "Player") return;
-        
-        _isTriggered = true;
+        if (other.gameObject.tag != "Player") return;       
 
         if (this.OnTriggerEntered != null)
         {
@@ -43,30 +40,29 @@ public class PowerUpItem : MonoBehaviour {
 
         GameObject typeVisual = this.PowerUpVisial[(int)this.PowerUpType];
         typeVisual.SetActive(true);
+        typeVisual.transform.LookAt(other.transform);
 
-        TankUtility.Utility.Instance.AnimateScale(this.PowerUpBox, Vector3.zero, 0.25f, delegate
-        {
-           
-            Debug.Log("visual name: " + typeVisual.name);
-            TankUtility.Utility.Instance.AnimateScale(typeVisual, Vector3.zero, 0.75f,
-                                                      delegate {
+        TankUtility.Utility.Instance.AnimateScale(this.PowerUpBox, Vector3.zero, 0.25f);
+
+        Vector3 targetPosLocal = new Vector3(typeVisual.transform.localPosition.x,
+                                        typeVisual.transform.localPosition.y + 2,
+                                        typeVisual.transform.localPosition.z);
+
+        TankUtility.Utility.Instance.AnimateMoveLocalWithDelay(0.1f, typeVisual, targetPosLocal, 0.5f);
+
+        TankUtility.Utility.Instance.AnimateScaleWithDelay(0.1f, typeVisual, Vector3.zero, 0.5f,
+                                                      delegate
+                                                      {
                                                           this.gameObject.SetActive(false);
                                                       });
-        });
-
-       
     }
 
-    void FixedUpdate () {
-        transform.Rotate(Vector3.up, Time.fixedDeltaTime * 45f);
+    private void OnDestroy()
+    {
+        if (this.OnDestorySelf != null)
+        {
+            this.OnDestorySelf(this);
+        }
+    }
 
-        //if (_isTriggered)
-        //{
-        //    transform.localScale = Vector3.Lerp(transform.localScale, Vector3.zero, Time.fixedDeltaTime);
-        //    if (transform.localScale == Vector3.zero)
-        //    {
-        //        this.gameObject.SetActive(false);
-        //    }
-        //}
-	}
 }

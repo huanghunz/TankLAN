@@ -13,10 +13,19 @@ public class FireControlBase : NetworkBehaviour {
 
     public float BulletForce = 400f;
 
-    private int _fireDamage = 5;
-    public  int DamageBuffer = 0;
+    protected int FireDamage = 5;
 
-    public bool IsBufferOn = false;
+    //[SyncVar(hook = "OnChangeHealth")]
+    //public int HealthValue = 100;
+    public int MaxNumBullet = 10;
+
+    protected int NumBullet = 0;
+    protected float BulletCoolDown = 3f;
+
+    protected PlayerHUD PlayerUI;
+    protected bool _isRefilling;
+
+    protected const float REFILL_TIME = 3f;
 
     [Command]
     protected void CmdShoot(int damage)
@@ -29,13 +38,38 @@ public class FireControlBase : NetworkBehaviour {
         this.CreateBullet(damage);
     }
 
+    private void Awake()
+    {
+        this.PlayerUI = this.GetComponent<PlayerHUD>();
+    }
+
     void Update()
     {
         if (!isLocalPlayer) return;
 
+        if (this.NumBullet == 0 && !_isRefilling)
+        {
+            this.BulletCoolDown = REFILL_TIME;
+            _isRefilling = true;
+            StartCoroutine(this.RefillBullet(REFILL_TIME));
+        }
+
+        this.BulletCoolDown -= Time.deltaTime;
+        if (this.BulletCoolDown >= 0)
+        {
+            return;
+        }
+
+        this.Shoot();
+    }
+
+    protected virtual void Shoot()
+    {
         if (Input.GetKeyDown("space"))
         {
-            this.CmdShoot(_fireDamage + this.DamageBuffer);
+            this.CmdShoot(FireDamage);
+            --this.NumBullet;
+            this.PlayerUI.UpdateBulletCount(this.NumBullet);
         }
     }
 
@@ -44,5 +78,21 @@ public class FireControlBase : NetworkBehaviour {
         GameObject bullet = Instantiate(this.BulletPrefab, this.BulletSpwanPoint.position, this.BulletSpwanPoint.rotation);
         bullet.GetComponent<Rigidbody>().AddForce(this.BulletSpwanPoint.forward * this.BulletForce);
         bullet.GetComponent<BulletBase>().BulletDamage = damage;
+    }
+
+    protected IEnumerator RefillBullet(float time)
+    {
+        var delay = new WaitForEndOfFrame();
+        float elapsed = 0;
+        while(elapsed < 1)
+        {
+            elapsed += Time.deltaTime / time;
+            int count = Mathf.FloorToInt(elapsed * 10);
+            this.PlayerUI.UpdateBulletCount(count);
+            yield return delay;
+        }
+
+        this.NumBullet = 10;
+        _isRefilling = false;
     }
 }

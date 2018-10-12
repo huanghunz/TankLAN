@@ -56,7 +56,7 @@ GameObject:
   - component: {fileID: 33029065459746488}
   - component: {fileID: 23513603304556412}
   m_Layer: 0
-  m_Name: NamePos
+  m_Name: BulletCountPos
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -96,6 +96,23 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &1336175394233318
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4259535408846166}
+  - component: {fileID: 33132614496246780}
+  - component: {fileID: 23999953347891684}
+  m_Layer: 0
+  m_Name: NamePos
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1 &1358935664601436
 GameObject:
   m_ObjectHideFlags: 0
@@ -111,6 +128,7 @@ GameObject:
   - component: {fileID: 114217078425193302}
   - component: {fileID: 114969908079081818}
   - component: {fileID: 114145329166945330}
+  - component: {fileID: 114725356927658714}
   m_Layer: 0
   m_Name: TankLaser
   m_TagString: Player
@@ -304,6 +322,19 @@ Transform:
   m_Father: {fileID: 4707030545658552}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4259535408846166
+Transform:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1336175394233318}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 2.21, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4653265569961062}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4307791344685378
 Transform:
   m_ObjectHideFlags: 1
@@ -367,9 +398,10 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4707030545658552}
-  - {fileID: 4798562880600282}
+  - {fileID: 4259535408846166}
   - {fileID: 4662797925964442}
   - {fileID: 4907156894931972}
+  - {fileID: 4798562880600282}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -414,12 +446,12 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1050936162188028}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 2.26, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -1.02, y: 1.53, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4653265569961062}
-  m_RootOrder: 1
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4907156894931972
 Transform:
@@ -873,6 +905,41 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!23 &23999953347891684
+MeshRenderer:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1336175394233318}
+  m_Enabled: 0
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RenderingLayerMask: 4294967295
+  m_Materials:
+  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_PreserveUVs: 1
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 0
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
 --- !u!33 &33029065459746488
 MeshFilter:
   m_ObjectHideFlags: 1
@@ -887,6 +954,13 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1905010479062136}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!33 &33132614496246780
+MeshFilter:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1336175394233318}
+  m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!33 &33185914104699492
 MeshFilter:
   m_ObjectHideFlags: 1
@@ -999,8 +1073,6 @@ MonoBehaviour:
     type: 2}
   BulletSpwanPoint: {fileID: 4662797925964442}
   BulletForce: 400
-  DamageBuffer: 0
-  IsBufferOn: 0
   BulletSpwanPointSecond: {fileID: 4907156894931972}
 --- !u!114 &114217078425193302
 MonoBehaviour:
@@ -1013,14 +1085,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d8cc87b82cbd427cb297a52eb71b9ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  NamePrefab: {fileID: 114988081146945530, guid: a95400d789bb64eb2b42c82ea4e83ff9,
-    type: 2}
-  NamePos: {fileID: 4798562880600282}
-  HealthPrefab: {fileID: 114482449638432720, guid: 714058acceb783d408514721a8989789,
-    type: 2}
   Explosion: {fileID: 1994223793731716, guid: 0bcdac7b2f15b5d4fb13e20c979332a7, type: 2}
+  InvisibleVisual: {fileID: 2100000, guid: 73c4f93b2ea2bee44b274420a6f3d317, type: 2}
   PlayerName: Player
-  PlayerColour: '#ffffff'
   HealthValue: 100
 --- !u!114 &114258306097340222
 MonoBehaviour:
@@ -1075,6 +1142,26 @@ MonoBehaviour:
   m_SnapThreshold: 5
   m_InterpolateRotation: 1
   m_InterpolateMovement: 1
+--- !u!114 &114725356927658714
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1358935664601436}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 98962b130f023614385fd834514fa44b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  NamePrefab: {fileID: 114988081146945530, guid: a95400d789bb64eb2b42c82ea4e83ff9,
+    type: 2}
+  NamePos: {fileID: 4259535408846166}
+  HealthPrefab: {fileID: 114482449638432720, guid: 714058acceb783d408514721a8989789,
+    type: 2}
+  HealthPos: {fileID: 0}
+  BulletCountPrefab: {fileID: 114056517975104844, guid: b064b941d1ddf1f4faf3d2648528af00,
+    type: 2}
+  BulletCountPos: {fileID: 4798562880600282}
 --- !u!114 &114969908079081818
 MonoBehaviour:
   m_ObjectHideFlags: 1

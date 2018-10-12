@@ -46,34 +46,15 @@ public class PowerUp : NetworkBehaviour
                 }
             }
         }
-
-        //foreach (LocalPlayer player in _playerPowerUp.Keys)
-        //{
-        //    var keys = _playerPowerUp[player].Keys;
-        //    foreach (string type in keys)
-        //    {
-        //        if (_playerPowerUp[player][type] == 0f)
-        //        {
-        //            continue;
-        //        }
-
-        //           _playerPowerUp[player][type] -= Time.deltaTime;
-        //        if (_playerPowerUp[player][type] < 0f)
-        //        {
-        //            this.OnPowerUpEnd(player, type);
-        //            _playerPowerUp[player][type] = 0;
-        //        }
-        //    }
-        //}
     }
 
     //public override void OnStartServer()
-    public void SpawnPowerupItems()
+    public void SpawnPowerupItems(int num)
     {
         _powerupItems = new List<PowerUpItem>();
 
         int numTypes = Enum.GetNames(typeof(PowerUpItem.Types)).Length;
-        for (int i = 0; i < NumberOfItems; i++)
+        for (int i = 0; i < num; i++)
         {
             var item = (GameObject)Instantiate(PowerUpPrefab, Vector3.zero, Quaternion.identity);
             Vector3 pos = GameController.GetUniqueSpawnPosition();
@@ -82,20 +63,35 @@ public class PowerUp : NetworkBehaviour
 
             _powerupItems.Add(item.GetComponent<PowerUpItem>());
             _powerupItems[i].PowerUpType = (PowerUpItem.Types)Random.Range(0, numTypes);
+
             _powerupItems[i].OnTriggerEntered += this.OnPlayerTriggered;
+            _powerupItems[i].OnDestorySelf += this.OnItemDestory;
 
             Vector3 targetPos = new Vector3(pos.x, 1.25f, pos.z);
-            StartCoroutine(this.MoveTo(item, targetPos, Random.Range(20,50)));
+
+            TankUtility.Utility.Instance.AnimateMove(item, targetPos, Random.Range(0.2f, 0.5f));
         }
+    }
+
+
+    void OnItemDestory(PowerUpItem item)
+    {
+        item.OnTriggerEntered -= this.OnPlayerTriggered;
+        item.OnDestorySelf -= this.OnItemDestory;
     }
 
     private void OnDestroy()
     {
-        if (_playerPowerUp == null) return;
+        if (_powerupItems == null) return;
 
-        foreach(PowerUpItem item in _powerupItems)
+        foreach (PowerUpItem item in _powerupItems)
         {
+            if (item == null)
+            {
+                continue;
+            }
             item.OnTriggerEntered -= this.OnPlayerTriggered;
+            item.OnDestorySelf -= this.OnItemDestory;
         }
     }
 
@@ -140,18 +136,6 @@ public class PowerUp : NetworkBehaviour
             case "Invisible":
                 player.SetVisibility(true);
                 break;
-        }
-    }
-
-    private IEnumerator MoveTo(GameObject go, Vector3 targetPos, float speed)
-    {
-        var delay = new WaitForEndOfFrame();
-        
-        while (go.transform.position != targetPos)
-        {
-            go.transform.position = Vector3.MoveTowards(go.transform.position, targetPos, Time.deltaTime * speed);
-
-            yield return delay;
         }
     }
 }

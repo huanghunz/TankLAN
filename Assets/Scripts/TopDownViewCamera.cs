@@ -6,21 +6,27 @@ public class TopDownViewCamera : MonoBehaviour {
 
     public static bool ENABLE_VIEW;
     public GameObject ViewUI;
-    private Camera _topDownCam;
+    public SetupMaze Maze;
 
-    private SetupMaze _maze;
+    private Camera _topDownCam;
 
     private void Awake()
     {
-        _maze = FindObjectOfType<SetupMaze>();
         _topDownCam = this.GetComponent<Camera>();
-
-        _topDownCam.orthographicSize = (int)(_maze.FinalScale * 1.5)+1;
+        if (Maze == null)
+        {
+            Debug.Log("Null MMMMMMAAAAZZZE ???");
+            return;
+        }
+        _topDownCam.orthographicSize = (int)(Maze.FinalScale * 1.5) + 1;
     }
 
     private void Update()
     {
-        this.SetVisible(ENABLE_VIEW);
+        if (_topDownCam.enabled != ENABLE_VIEW)
+        {
+            this.SetVisible(ENABLE_VIEW);
+        }
     }
 
     public void SetVisible(bool visible)

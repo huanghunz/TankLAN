@@ -70,7 +70,7 @@ Transform:
   m_GameObject: {fileID: 1404263823192374}
   m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: -1e-15, z: 0.21}
-  m_LocalScale: {x: 0.10609206, y: 0.21258664, z: 0.10609212}
+  m_LocalScale: {x: 0.10609206, y: 0.4, z: 0.10609212}
   m_Children: []
   m_Father: {fileID: 4141528732260264}
   m_RootOrder: 0
@@ -197,6 +197,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Explosion: {fileID: 100006, guid: b69e244ba75a6c54db5b0566c1ebb831, type: 2}
+  BulletDamage: 5
 --- !u!136 &136209011865581048
 CapsuleCollider:
   m_ObjectHideFlags: 1
