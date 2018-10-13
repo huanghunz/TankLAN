@@ -37,17 +37,6 @@ public class LocalPlayer : NetworkBehaviour {
         _HUD.UpdateName(PlayerName);
     }
 
-    //[Command]
-    //public void CmdChangeColour(string newColour)
-    //{
-    //    PlayerVisiblity = newColour;
-        
-    //    foreach (Renderer r in _renderers)
-    //    {
-    //        r.material.SetColor("_Color", ColorFromHex(PlayerVisiblity));
-    //    }
-    //}
-
     [Command]
     public void CmdChangeHealth(int hitValue)
     {
@@ -97,88 +86,42 @@ public class LocalPlayer : NetworkBehaviour {
         _HUD.UpdateName(PlayerName);
     }
 
-  //  void OnChangeColour (string n)
-  //  {
-  //      PlayerVisiblity = n;
-		//Renderer[] rends = GetComponentsInChildren<Renderer>( );
-
-  //      foreach( Renderer r in rends )
-  //      {
-  //       	if(r.gameObject.name == "BODY")
-  //          	r.material.SetColor("_Color", ColorFromHex(PlayerVisiblity));
-  //      }
-  //  }
-	
-
-	//void OnGUI()
-	//{
-	//	if(isLocalPlayer)
-	//	{
-	//		_textboxname = GUI.TextField (new Rect (25, 15, 100, 25), _textboxname);
- //           if (GUI.Button(new Rect(130, 15, 35, 25), "Set"))
- //           {
- //               Debug.Log("CALL cmd change name");
- //               CmdChangeName(_textboxname);
- //           }
-
-	//		_colourboxname = GUI.TextField (new Rect (170, 15, 100, 25), _colourboxname);
-	//		if(GUI.Button(new Rect(275,15,35,25),"Set"))
-	//			CmdChangeColour(_colourboxname);
-	//	}
-	//}
-
-
-	//Credit for this method: from http://answers.unity3d.com/questions/812240/convert-hex-int-to-colorcolor32.html
-	//hex for testing green: 04BF3404  red: 9F121204  blue: 221E9004
-	//Color ColorFromHex(string hex)
-	//{
-	//	hex = hex.Replace ("0x", "");
- //       hex = hex.Replace ("#", "");
- //       byte a = 255;
- //       byte r = byte.Parse(hex.Substring(0,2), System.Globalization.NumberStyles.HexNumber);
- //       byte g = byte.Parse(hex.Substring(2,2), System.Globalization.NumberStyles.HexNumber);
- //       byte b = byte.Parse(hex.Substring(4,2), System.Globalization.NumberStyles.HexNumber);
- //       if(hex.Length == 8)
- //       {
- //            a = byte.Parse(hex.Substring(4,2), System.Globalization.NumberStyles.HexNumber);
- //       }
- //       return new Color32(r,g,b,a);
- //   }
-
     private void SetupPlayer()
     {
         if (isLocalPlayer)
         {
             // Server is ready.
-            this.SetVisibility(true);
             this.SetControllability(true);
             CameraFollow360.player = this.gameObject.transform;
             
             this.transform.position = GameController.GetUniqueSpawnPosition();
         }
-        else
-        {
-            this.SetVisibility(true);
-        }
 
-      //  Debug.Log("Manual hook change name");
+        this.SetVisibility(true);
+        _playerModel.SetActive(true);
         this.OnPropertyChange();
     }
 
-    public void SetVisibility(bool visibleForAll, bool visibleLocal = true)
+    public void SetVisibility(bool visibleForOther)
     {
-        _playerModel.SetActive(visibleForAll);
-        _HUD.SetVisible(visibleForAll);
-
-        if (!visibleForAll && visibleLocal && isLocalPlayer && _isUsingOriginalMaterials)
+        if (isLocalPlayer)
         {
-            _playerModel.SetActive(true);
             _HUD.SetVisible(true);
-            this.SwapMaterials(false);
+            if (!visibleForOther && _isUsingOriginalMaterials)
+            {
+                this.SwapMaterials(false);
+                _isUsingOriginalMaterials = false;
+            }
+            if (visibleForOther && !_isUsingOriginalMaterials)
+            {
+                this.SwapMaterials(true);
+                _isUsingOriginalMaterials = true;
+            }
         }
-        if (visibleForAll && !_isUsingOriginalMaterials)
+        else
         {
-            this.SwapMaterials(true);
+            _playerModel.SetActive(visibleForOther);
+            _HUD.SetVisible(visibleForOther);
         }
     }
 
@@ -222,7 +165,8 @@ public class LocalPlayer : NetworkBehaviour {
 
         _HUD = this.GetComponent<PlayerHUD>();
 
-        this.SetVisibility(false, true);
+        _playerModel.SetActive(false);
+        this.SetVisibility(false);
         this.SetControllability(false);
     }
 

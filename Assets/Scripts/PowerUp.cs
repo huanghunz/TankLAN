@@ -11,6 +11,8 @@ public class PowerUp : NetworkBehaviour
     public GameObject PowerUpPrefab;
     public int NumberOfItems = 5;
 
+    public int _numPickedItems = 0;
+
     private List<PowerUpItem> _powerupItems;
 
     Dictionary<LocalPlayer, Dictionary<string, float>> _playerPowerUp;
@@ -51,6 +53,7 @@ public class PowerUp : NetworkBehaviour
     //public override void OnStartServer()
     public void SpawnPowerupItems(int num)
     {
+        this.NumberOfItems = num;
         _powerupItems = new List<PowerUpItem>();
 
         int numTypes = Enum.GetNames(typeof(PowerUpItem.Types)).Length;
@@ -62,7 +65,7 @@ public class PowerUp : NetworkBehaviour
             NetworkServer.Spawn(item);
 
             _powerupItems.Add(item.GetComponent<PowerUpItem>());
-            _powerupItems[i].PowerUpType = (PowerUpItem.Types)Random.Range(0, numTypes);
+            _powerupItems[i].PowerUpType = PowerUpItem.Types.Invisible;// (PowerUpItem.Types)Random.Range(0, numTypes);
 
             _powerupItems[i].OnTriggerEntered += this.OnPlayerTriggered;
             _powerupItems[i].OnDestorySelf += this.OnItemDestory;

@@ -1072,7 +1072,8 @@ MonoBehaviour:
   BulletPrefab: {fileID: 1868044754807370, guid: c9ba3455bb3989044a21156f706d3d86,
     type: 2}
   BulletSpwanPoint: {fileID: 4662797925964442}
-  BulletForce: 400
+  BulletForce: 750
+  MaxNumBullet: 10
   BulletSpwanPointSecond: {fileID: 4907156894931972}
 --- !u!114 &114217078425193302
 MonoBehaviour:
@@ -1162,6 +1163,7 @@ MonoBehaviour:
   BulletCountPrefab: {fileID: 114056517975104844, guid: b064b941d1ddf1f4faf3d2648528af00,
     type: 2}
   BulletCountPos: {fileID: 4798562880600282}
+  IsLocalPlayer: 0
 --- !u!114 &114969908079081818
 MonoBehaviour:
   m_ObjectHideFlags: 1

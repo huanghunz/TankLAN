@@ -14,6 +14,8 @@ public class PlayerHUD : MonoBehaviour {
     public Slider BulletCountPrefab;
     public Transform BulletCountPos;
 
+
+
     public bool IsLocalPlayer;
 
     private GameObject _canvas;
