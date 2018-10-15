@@ -6,9 +6,8 @@ using UnityEngine.UI;
 public class LocalPlayer : NetworkBehaviour {
 
     public GameObject Explosion;
-    
-	//private string _textboxname = "";
-	//private string _colourboxname = "";
+
+    public GameObject PlayerPrefab;
 
     private GameObject _playerModel;
     private Renderer[] _renderers;
@@ -20,12 +19,11 @@ public class LocalPlayer : NetworkBehaviour {
 
     private bool _isPlayerSpawned;
     private bool _isUsingOriginalMaterials = true;
+
+    public bool IsLocalPlayer;
     
     [SyncVar (hook = "OnChangeName")]
 	public string PlayerName = "player";
-
-	//[SyncVar (hook = "OnChangeColour")]
-	//public string PlayerVisibility = "#ffffff";
 
     [SyncVar (hook = "OnChangeHealth")]
     public int HealthValue = 100;
@@ -57,13 +55,13 @@ public class LocalPlayer : NetworkBehaviour {
     [ClientRpc]
     public void RpcRespawn()
     {
-        if (!isLocalPlayer) return;
+        if (!IsLocalPlayer) return;
         this.transform.position = GameController.GetUniqueSpawnPosition();
     }
     
     public void AddDamage(int damage)
     {
-        if (!isLocalPlayer) return;
+        if (!IsLocalPlayer) return;
         this.CmdChangeHealth(damage);
     }
 
@@ -88,7 +86,7 @@ public class LocalPlayer : NetworkBehaviour {
 
     private void SetupPlayer()
     {
-        if (isLocalPlayer)
+        if (IsLocalPlayer)
         {
             // Server is ready.
             this.SetControllability(true);
@@ -104,7 +102,7 @@ public class LocalPlayer : NetworkBehaviour {
 
     public void SetVisibility(bool visibleForOther)
     {
-        if (isLocalPlayer)
+        if (IsLocalPlayer)
         {
             _HUD.SetVisible(true);
             if (!visibleForOther && _isUsingOriginalMaterials)
@@ -148,7 +146,7 @@ public class LocalPlayer : NetworkBehaviour {
 
     private void SetControllability(bool control)
     {
-        GetComponent<PlayerController>().enabled = control;
+        GetComponent<TankPlayerController>().enabled = control;
     }
 
     void Awake()
@@ -172,9 +170,12 @@ public class LocalPlayer : NetworkBehaviour {
 
     public override void OnStartLocalPlayer()
     {
-        base.OnStartLocalPlayer();
-
+        this.IsLocalPlayer = isLocalPlayer;
+        //GameObject actual = Instantiate(this.PlayerPrefab, Vector3.zero, Quaternion.identity);
+        //actual.transform.SetParent(this.transform);
         _HUD.IsLocalPlayer = isLocalPlayer;
+
+        base.OnStartLocalPlayer();
     }
 
     void Update()

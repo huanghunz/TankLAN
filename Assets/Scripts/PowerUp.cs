@@ -100,6 +100,7 @@ public class PowerUp : NetworkBehaviour
 
     private void OnPlayerTriggered(GameObject player, PowerUpItem.Types type)
     {
+
         string typeStr = type.ToString();
         LocalPlayer localPlayer = player.GetComponent<LocalPlayer>();
         switch (type)

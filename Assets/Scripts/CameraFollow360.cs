@@ -13,20 +13,15 @@ public class CameraFollow360 : MonoBehaviour {
 	public float rotSpeed = 10;
 
     private float _distance = 0;
-
     private float _originalDistance = 0;
 
+    private Vector3 _prevPlayerPosition;
 
-    private Vector3 _lookOffset;
-    private Vector3 _originalLookOffset;
     private void Awake()
     {
         _originalDistance = this.distance;
 
         _distance = this.distance;
-
-        _lookOffset = this.lookOffset;
-        _originalLookOffset = new Vector3(_lookOffset.x, _lookOffset.y, _lookOffset.z);
     }
 
     void FixedUpdate()
@@ -35,7 +30,7 @@ public class CameraFollow360 : MonoBehaviour {
         {
             return;
         }
-
+       
         Vector3 lookPosition = player.position + lookOffset;
         Vector3 relativePos = lookPosition - transform.position;
         Quaternion rot = Quaternion.LookRotation(relativePos);
@@ -50,9 +45,14 @@ public class CameraFollow360 : MonoBehaviour {
      
         if (Physics.Raycast(lookPosition, this.transform.position, out hit, (this.transform.position - lookPosition).magnitude + 1))
         {
-            if (hit.transform.name == "Wall")
+            if (_prevPlayerPosition != player.transform.position)
             {
-                _distance = Mathf.Max(_distance - 0.025f, 1);
+                _prevPlayerPosition = player.transform.position;
+
+                if (hit.transform.name == "Wall")
+                {
+                    _distance = Mathf.Max(_distance - 0.025f, 1);
+                }
             }
         }
         else

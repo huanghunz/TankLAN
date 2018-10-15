@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class PlayerController : MonoBehaviour {
+public class TankPlayerController : MonoBehaviour {
 
 	private Rigidbody _rb;
     private float _speed = 25.0F / 4;

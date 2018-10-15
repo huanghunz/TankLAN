@@ -7,17 +7,16 @@ using UnityEngine.Networking;
 public class FireControlBase : NetworkBehaviour {
 
     public GameObject BulletPrefab;
-
-    [Header("Bullet Spawn Point")]
+    
     public Transform BulletSpwanPoint;
 
     public float BulletForce = 400f;
 
     protected int FireDamage = 5;
 
-    //[SyncVar(hook = "OnChangeHealth")]
-    //public int HealthValue = 100;
     public int MaxNumBullet = 10;
+
+    public int NumBullerPerShooting = 1; 
 
     protected int NumBullet = 0;
     protected float BulletCoolDown = 3f;
@@ -46,7 +45,7 @@ public class FireControlBase : NetworkBehaviour {
     void Update()
     {
         if (!isLocalPlayer) return;
-
+        var b = GetComponent<LocalPlayer>().isLocalPlayer;
         if (this.NumBullet == 0 && !_isRefilling)
         {
             this.BulletCoolDown = REFILL_TIME;
@@ -68,16 +67,19 @@ public class FireControlBase : NetworkBehaviour {
         if (Input.GetKeyDown("space"))
         {
             this.CmdShoot(FireDamage);
-            --this.NumBullet;
+            this.NumBullet -= this.NumBullerPerShooting;
             this.PlayerUI.UpdateBulletCount(this.NumBullet);
         }
     }
 
     protected virtual void CreateBullet(int damage)
     {
-        GameObject bullet = Instantiate(this.BulletPrefab, this.BulletSpwanPoint.position, this.BulletSpwanPoint.rotation);
-        bullet.GetComponent<Rigidbody>().AddForce(this.BulletSpwanPoint.forward * this.BulletForce);
-        bullet.GetComponent<BulletBase>().BulletDamage = damage;
+        for (int i = 0; i < this.NumBullerPerShooting; ++i)
+        {
+            GameObject bullet = Instantiate(this.BulletPrefab, this.BulletSpwanPoint.position, this.BulletSpwanPoint.rotation);
+            bullet.GetComponent<Rigidbody>().AddForce(this.BulletSpwanPoint.forward * this.BulletForce);
+            bullet.GetComponent<BulletBase>().BulletDamage = damage;
+        }
     }
 
     protected IEnumerator RefillBullet(float time)

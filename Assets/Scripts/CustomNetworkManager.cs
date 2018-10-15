@@ -8,7 +8,7 @@ using MyMaze;
 public class MessageTypes
 {
     // Message ID
-    public const short PlayerPrefabSelect = MsgType.Highest + 1;
+    public const short PlayerPrefabSelect = MsgType.Highest + 2;
     
     public class PlayerPrefabMessage : MessageBase
     {
@@ -20,8 +20,6 @@ public class MessageTypes
 public class CustomNetworkManager : NetworkManager {
 
     public short PlayerPrefabIndex;
-
-    private MazeGenerator _maze;
 
     public override void OnStartServer()
     {

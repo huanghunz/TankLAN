@@ -216,6 +216,7 @@ GameObject:
   - component: {fileID: 65435548711082622}
   - component: {fileID: 114170541455006954}
   - component: {fileID: 54268074246649952}
+  - component: {fileID: 114690115322240876}
   m_Layer: 0
   m_Name: PowerupPrefab
   m_TagString: Untagged
@@ -908,6 +909,18 @@ MonoBehaviour:
     i15: 248
   m_ServerOnly: 0
   m_LocalPlayerAuthority: 0
+--- !u!114 &114690115322240876
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1590266847448282}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13819968a4ba4b94fb4f7bd6772c4659, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  RotationCenter: {fileID: 0}
 --- !u!114 &114733676688089160
 MonoBehaviour:
   m_ObjectHideFlags: 1

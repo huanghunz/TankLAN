@@ -9,6 +9,9 @@ EditorBuildSettings:
     path: Assets/Scenes/SampleScene.unity
     guid: 99c9720ab356a0642a771bea13969a05
   - enabled: 1
-    path: Assets/main.unity
+    path: Assets/Scenes/Lobby.unity
+    guid: adaecde8850bc5843b71782de78a20fe
+  - enabled: 1
+    path: Assets/Scenes/Tank.unity
     guid: 378de37f6149648ad934a3d7e556f8ff
   m_configObjects: {}
