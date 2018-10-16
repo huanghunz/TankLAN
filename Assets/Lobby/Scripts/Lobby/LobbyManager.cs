@@ -5,9 +5,7 @@ using UnityEngine.Networking;
 using UnityEngine.Networking.Types;
 using UnityEngine.Networking.Match;
 using System.Collections;
-
-
-
+using System.Collections.Generic;
 
 namespace Prototype.NetworkLobby
 {
@@ -57,9 +55,6 @@ namespace Prototype.NetworkLobby
         //of players, so that even client know how many player there is.
         [HideInInspector]
         public int _playerNumber = 0;
-
-        [HideInInspector]
-        public int _playerPrefabIdx = 0;
 
         //used to disconnect a client properly when exiting the matchmaker
         [HideInInspector]
@@ -455,5 +450,37 @@ namespace Prototype.NetworkLobby
             ChangeTo(mainMenuPanel);
             infoPanel.Display("Client error : " + (errorCode == 6 ? "timeout" : errorCode.ToString()), "Close", null);
         }
+
+        //public override GameObject OnLobbyServerCreateGamePlayer(
+        //            NetworkConnection conn, short playerControllerId)
+        //{
+
+
+        //    if (!_playerModelRecord.ContainsKey(playerControllerId))
+        //    {
+        //        Debug.LogError("Fail to find id: " + playerControllerId);
+        //        return base.OnLobbyServerCreateGamePlayer(conn, playerControllerId);
+        //    }
+        //    GameObject go = base.OnLobbyServerCreateGamePlayer(conn, playerControllerId);
+        //    if (go != null)
+        //    {
+        //        Debug.Log(go.name);
+        //    }
+        //    else
+        //    {
+        //        Debug.Log("null go");
+        //    }
+
+        //    int modelIdx = _playerModelRecord[playerControllerId];
+
+        //    Debug.Log("connid: " + conn.connectionId + "  playerControllerId: " + playerControllerId + " modelId: " + modelIdx + " spawnPrefabs[modelIdx]" + spawnPrefabs[modelIdx].name);
+        //    GameObject _temp = (GameObject)GameObject.Instantiate(
+        //        spawnPrefabs[modelIdx],
+        //        Vector3.zero,
+        //        Quaternion.identity);
+
+        //    NetworkServer.AddPlayerForConnection(conn, _temp, playerControllerId);
+        //    return _temp;
+        //}
     }
 }

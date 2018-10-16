@@ -3,8 +3,9 @@ using System.Collections;
 using UnityEngine.Networking;
 using UnityEngine.UI;
 
-public class LocalPlayer : NetworkBehaviour {
+public partial class LocalPlayer : NetworkBehaviour {
 
+    // Local Player
     public GameObject Explosion;
 
     public GameObject PlayerPrefab;
@@ -72,12 +73,15 @@ public class LocalPlayer : NetworkBehaviour {
 
     void OnChangeHealth(int n)
     {
+        if (!_isPlayerSpawned) return;
         HealthValue = n;
         _HUD.UpdateHealth(HealthValue);
     }
 
     void OnChangeVisibilty(bool visible)
     {
+        if (!_isPlayerSpawned) return;
+
         Visible = visible;
         if (isLocalPlayer)
         {
@@ -105,7 +109,9 @@ public class LocalPlayer : NetworkBehaviour {
     void OnChangeName (string n)
     {
         PlayerName = n;
-        _HUD.UpdateName(PlayerName);
+
+        if (_HUD != null)
+            _HUD.UpdateName(PlayerName);
     }
 
     private void SetupPlayer()
@@ -131,44 +137,65 @@ public class LocalPlayer : NetworkBehaviour {
 
     private void SetControllability(bool control)
     {
-        GetComponent<TankPlayerController>().enabled = control;
+        _enableControl = control;
     }
 
-    void Awake()
-    {
-        Debug.Assert(transform.Find("Model") != null, "Fail to find object called 'Model'");
-        _playerModel = transform.Find("Model").gameObject;
 
-         _HUD = this.GetComponent<PlayerHUD>();
-        Debug.Assert(_HUD != null, "Fail to find component PlayerHUD");
+    //public override void OnStartLocalPlayer()
+    //{
+       
 
-        Debug.Assert(transform.Find("Ghost") != null, "Fail to find object called 'Ghost'");
-        _playerGhost = transform.Find("Ghost").gameObject;
-
-        _playerModel.SetActive(false);
-        _playerGhost.SetActive(false);
-        this.SetVisibility(false);
-        this.SetControllability(false);
-    }
-
-    public override void OnStartLocalPlayer()
-    {
-       // Debug.Log("on start local player");
-       //// this.IsLocalPlayer = isLocalPlayer;
-       // //GameObject actual = Instantiate(this.PlayerPrefab, Vector3.zero, Quaternion.identity);
-       // //actual.transform.SetParent(this.transform);
-        _HUD.IsLocalPlayer = isLocalPlayer;
-
-        base.OnStartLocalPlayer();
-    }
+    //    base.OnStartLocalPlayer();
+    //}
 
     void Update()
 	{
         if (!_isPlayerSpawned && GameController.IsMazeReady)
         {
+            if (this.PlayerPrefab == null)
+            {
+                Debug.LogError("nul lplayer prefab");
+                return;
+            }
+
+            GameObject actual = Instantiate(this.PlayerPrefab);
+            actual.transform.SetParent(this.transform);
+            actual.transform.localPosition = Vector3.zero;
+            actual.transform.localRotation = Quaternion.identity;
+
+            _HUD = actual.GetComponent<PlayerHUD>();
+            Debug.Assert(_HUD != null, "Fail to find component PlayerHUD");
+            _HUD.IsLocalPlayer = isLocalPlayer;
+            _HUD.UpdateName(PlayerName);
+
+            Debug.Assert(actual.transform.Find("Model") != null, "Fail to find object called 'Model'");
+            _playerModel = actual.transform.Find("Model").gameObject;
+
+            Debug.Assert(actual.transform.Find("Ghost") != null, "Fail to find object called 'Ghost'");
+            _playerGhost = actual.transform.Find("Ghost").gameObject;
+
+            _playerModel.SetActive(false);
+            _playerGhost.SetActive(false);
+            this.SetVisibility(false);
+            this.SetControllability(false);
+
+            //Fire Attribute setup
+            ModelData data = actual.GetComponent<ModelData>();
+            this.BulletForce = data.BulletForces;
+            this.BulletPrefab = data.BulletPrefab;
+            this.BulletSpwanPoint = data.BulletSpawnPositions;
+            this.NumBullerPerShooting = data.NumBulletPerShooting;
+            this.MaxNumBullet = data.MaxNumBullet;
+
+            // Movement setup
+            _rb = this.GetComponent<Rigidbody>();
+
             _isPlayerSpawned = true;
             _playerModel.SetActive(true);
             this.SetupPlayer();
         }
+
+        if (_isPlayerSpawned)
+        this.UpdateFireControl();
 	}
 }

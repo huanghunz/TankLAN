@@ -239,7 +239,7 @@ Prefab:
     - target: {fileID: 11475086, guid: c0978251ff7b10d4fb954a4b56acd9f0, type: 2}
       propertyPath: m_GamePlayerPrefab
       value: 
-      objectReference: {fileID: 1660241916328744, guid: 6e23d3919c683274995f52440d2031e9,
+      objectReference: {fileID: 1295378670939640, guid: a1322aed25002b24996108fed2c5e06f,
         type: 2}
     - target: {fileID: 11475086, guid: c0978251ff7b10d4fb954a4b56acd9f0, type: 2}
       propertyPath: m_OfflineScene
@@ -264,17 +264,17 @@ Prefab:
     - target: {fileID: 11475086, guid: c0978251ff7b10d4fb954a4b56acd9f0, type: 2}
       propertyPath: m_SpawnPrefabs.Array.data[0]
       value: 
-      objectReference: {fileID: 1532314120750778, guid: cf7a34fda1275e94793aa2cd2d15b5f4,
+      objectReference: {fileID: 1233670176959954, guid: 709f64fd61f4c0c4ab0929e7ed3a2779,
         type: 2}
     - target: {fileID: 11475086, guid: c0978251ff7b10d4fb954a4b56acd9f0, type: 2}
       propertyPath: m_SpawnPrefabs.Array.data[2]
       value: 
-      objectReference: {fileID: 1358935664601436, guid: 9b59b0c14e56dde4cb1a7345e9fd7501,
+      objectReference: {fileID: 1662450486156164, guid: 28bad9f691fdd83419dec667f94a78f3,
         type: 2}
     - target: {fileID: 11475086, guid: c0978251ff7b10d4fb954a4b56acd9f0, type: 2}
       propertyPath: m_SpawnPrefabs.Array.data[1]
       value: 
-      objectReference: {fileID: 1660241916328744, guid: 6e23d3919c683274995f52440d2031e9,
+      objectReference: {fileID: 1859330669964856, guid: 36ab48d0d2674ab489ec8d0a49854e4e,
         type: 2}
     - target: {fileID: 11475086, guid: c0978251ff7b10d4fb954a4b56acd9f0, type: 2}
       propertyPath: PlayerPrefabIndex

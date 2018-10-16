@@ -28,12 +28,12 @@ public class PowerUp : NetworkBehaviour
 
     private void Update()
     {
-        _respawnTimer -= Time.deltaTime;
-        if (_respawnTimer <= 0)
-        {
-            _respawnTimer = RESPAWN_TIMER;
-            this.SpawnPowerupItems(this.NumberOfItems);
-        }
+        //_respawnTimer -= Time.deltaTime;
+        //if (_respawnTimer <= 0)
+        //{
+        //    _respawnTimer = RESPAWN_TIMER;
+        //    this.SpawnPowerupItems(this.NumberOfItems);
+        //}
 
 
         if (_playerPowerUp.Count == 0) return;

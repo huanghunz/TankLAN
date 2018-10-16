@@ -259,17 +259,6 @@ namespace Prototype.NetworkLobby
             }
 
             playerModelId = System.Array.IndexOf(ModelNames, playerModelName);
-
-            //TODO: refactor this code to a single place so it does not need to be run on every client.
-            if (playerModelId >= 0 && playerModelId < LobbyManager.s_Singleton.spawnPrefabs.Count)
-            {
-                LobbyManager.s_Singleton.gamePlayerPrefab =
-                    LobbyManager.s_Singleton.spawnPrefabs[playerModelId];
-            }
-            else
-            {
-                Debug.LogWarning("Index out of range: " + playerModelId);
-            }
         }
 
         //===== UI Handler
