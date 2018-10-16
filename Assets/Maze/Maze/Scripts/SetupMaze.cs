@@ -77,19 +77,16 @@ public class SetupMaze : MonoBehaviour {
         foreach (NetworkTransform child in allChildren)
         {
             NetworkServer.Spawn(child.gameObject);
-            //child.transform.SetParent(_mazeInstance.transform);
         }
 
         if (this.OnFinishGeneration != null)
         {
-            Debug.Log("finishe generation");
             this.OnFinishGeneration();
         }
     }
 
     private void SpwanServerObjects()
     {
-        Debug.Log("spwaning objects");
         StartCoroutine(this.ChangeSize());
     }
 }

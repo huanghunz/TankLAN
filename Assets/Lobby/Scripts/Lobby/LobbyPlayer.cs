@@ -359,7 +359,7 @@ namespace Prototype.NetworkLobby
         {
             if (_modelInUse.Count == ModelNames.Length)
             {
-                return;
+                return;  
             }
 
             int idx = System.Array.IndexOf(ModelNames, playerModelName);

@@ -1,7 +1,8 @@
 ﻿using System;
 using UnityEngine;
+using UnityEngine.Networking;
 
-public class PowerUpItem : MonoBehaviour {
+public class PowerUpItem : NetworkBehaviour {
 
     public delegate void TriggerEntered(GameObject go, Types type);
     public event TriggerEntered OnTriggerEntered;
@@ -19,7 +20,13 @@ public class PowerUpItem : MonoBehaviour {
     public GameObject[] PowerUpVisial;
     public GameObject PowerUpBox;
 
-    public Types PowerUpType;
+    [SyncVar (hook="OnTypeChange")]
+    public int PowerUpType;
+
+    public void OnTypeChange(int type)
+    {
+        PowerUpType = type;
+    }
 
     private void Awake()
     {
@@ -31,11 +38,11 @@ public class PowerUpItem : MonoBehaviour {
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag != "Player") return;       
+        if (other.gameObject.tag != "Player") return;
 
         if (this.OnTriggerEntered != null)
         {
-            this.OnTriggerEntered(other.gameObject, this.PowerUpType);
+            this.OnTriggerEntered(other.gameObject, (PowerUpItem.Types)this.PowerUpType);
         }
 
         GameObject typeVisual = this.PowerUpVisial[(int)this.PowerUpType];

@@ -536,7 +536,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   distance: 3.6
-  height: 2.5
+  height: 2.3
   lookOffset: {x: 0, y: 1, z: 0}
   cameraSpeed: 30
   rotSpeed: 30

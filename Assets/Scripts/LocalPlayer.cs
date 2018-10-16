@@ -19,8 +19,6 @@ public class LocalPlayer : NetworkBehaviour {
 
     private bool _isPlayerSpawned;
     private bool _isUsingOriginalMaterials = true;
-
-    public bool IsLocalPlayer;
     
     [SyncVar (hook = "OnChangeName")]
 	public string PlayerName = "player";
@@ -180,10 +178,10 @@ public class LocalPlayer : NetworkBehaviour {
 
     public override void OnStartLocalPlayer()
     {
-        Debug.Log("on start local player");
-       // this.IsLocalPlayer = isLocalPlayer;
-        //GameObject actual = Instantiate(this.PlayerPrefab, Vector3.zero, Quaternion.identity);
-        //actual.transform.SetParent(this.transform);
+       // Debug.Log("on start local player");
+       //// this.IsLocalPlayer = isLocalPlayer;
+       // //GameObject actual = Instantiate(this.PlayerPrefab, Vector3.zero, Quaternion.identity);
+       // //actual.transform.SetParent(this.transform);
         _HUD.IsLocalPlayer = isLocalPlayer;
 
         base.OnStartLocalPlayer();

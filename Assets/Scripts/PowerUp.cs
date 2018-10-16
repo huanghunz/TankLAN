@@ -62,13 +62,14 @@ public class PowerUp : NetworkBehaviour
             var item = (GameObject)Instantiate(PowerUpPrefab, Vector3.zero, Quaternion.identity);
             Vector3 pos = GameController.GetUniqueSpawnPosition();
             item.transform.position = new Vector3(pos.x, 10f, pos.z);
+            var powerUpitem = item.GetComponent<PowerUpItem>();
+            powerUpitem.PowerUpType = (int)PowerUpItem.Types.Invisible;// (PowerUpItem.Types)Random.Range(0, numTypes);
             NetworkServer.Spawn(item);
 
-            _powerupItems.Add(item.GetComponent<PowerUpItem>());
-            _powerupItems[i].PowerUpType = PowerUpItem.Types.Invisible;// (PowerUpItem.Types)Random.Range(0, numTypes);
+            _powerupItems.Add(powerUpitem);
 
-            _powerupItems[i].OnTriggerEntered += this.OnPlayerTriggered;
-            _powerupItems[i].OnDestorySelf += this.OnItemDestory;
+            powerUpitem.OnTriggerEntered += this.OnPlayerTriggered;
+            powerUpitem.OnDestorySelf += this.OnItemDestory;
 
             Vector3 targetPos = new Vector3(pos.x, 1.25f, pos.z);
 

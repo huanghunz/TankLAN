@@ -12,6 +12,7 @@ public class NetworkLobbyHook : LobbyHook {
 
         player.PlayerName = lobby.playerName;
         
+        
        
         //GameObject playerPrefab = manager.spawnPrefabs[lobby.playerModelIdx];
         //player.PlayerPrefab = playerPrefab;

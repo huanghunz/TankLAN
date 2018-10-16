@@ -348,6 +348,21 @@ namespace Prototype.NetworkLobby
             return true;
         }
 
+        public override GameObject OnLobbyServerCreateGamePlayer(
+                    NetworkConnection conn, short playerControllerId)
+        {
+
+            Debug.Log("z222!!! player created " + SceneManager.GetActiveScene().name);
+            //GameObject _temp = (GameObject)GameObject.Instantiate(
+            //    spawnPrefabs[playerPrefabIndex],
+            //    startPositions[conn.connectionId].position,
+            //    Quaternion.identity);
+
+            //NetworkServer.AddPlayerForConnection(conn, _temp, playerControllerId);
+            //return _temp;
+            return base.OnLobbyServerCreateGamePlayer(conn, playerControllerId);
+        }
+
         // --- Countdown management
 
         public override void OnLobbyServerPlayersReady()
