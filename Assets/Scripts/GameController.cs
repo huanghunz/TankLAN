@@ -12,12 +12,22 @@ public class GameController : NetworkBehaviour {
             return s_isMazeReady;
         }
     }
-    
+
     private static List<Vector3> s_spawnPositions;
+    private static List<Vector3> s_spawnPositionInUse;
     private static bool s_isMazeReady = false;
+
+    [SyncVar(hook = "ServerMazeReady")]
+    private bool serverSizeMazeReady = false;
 
     private SetupMaze _maze;
     private PowerUp _powerUpItems;
+    private bool _isClientSetup;
+
+    private void ServerMazeReady(bool isReady)
+    {
+        serverSizeMazeReady = isReady;
+    }
 
     public static Vector3 GetUniqueSpawnPosition()
     {
@@ -26,9 +36,25 @@ public class GameController : NetworkBehaviour {
             Debug.LogWarning("Maze creation is not ready");
             return Vector3.zero;
         }
-        
+
+        if (s_spawnPositions.Count == 0)
+        {
+            for(int i = 0; i < s_spawnPositionInUse.Count; ++i)
+            {
+                s_spawnPositions.Add(s_spawnPositionInUse[i]);
+            }
+            s_spawnPositionInUse.Clear();
+        }
+
+        if (s_spawnPositions.Count == 0)
+        {
+            Debug.LogWarning("s_spawnPositions.Count == 0");
+            return Vector3.zero;
+        }
+
         Vector3 pos = s_spawnPositions[Random.Range(0, s_spawnPositions.Count)];
         s_spawnPositions.Remove(pos);
+        s_spawnPositionInUse.Add(pos);
         return pos;
     }
 
@@ -45,31 +71,27 @@ public class GameController : NetworkBehaviour {
         }
     }
 
-    public override void OnStartClient()
+    private void Update()
     {
-        if (isServer)
+        if (!isServer && serverSizeMazeReady && !_isClientSetup)
         {
-            return;
-        }
+            _isClientSetup = true;
+            
+            _maze = FindObjectOfType<SetupMaze>();
+            var mazeParts = GameObject.FindGameObjectsWithTag("MazeComponent");
 
-        InitialStatus();
-        _maze = FindObjectOfType<SetupMaze>();
-        var mazeParts = GameObject.FindGameObjectsWithTag("MazeComponent");
-       
-        if (mazeParts == null)
-        {
-            return;
-        }
+            if (mazeParts == null)
+            {
+                return;
+            }
 
-        foreach (var mp in mazeParts)
-        {
-            mp.transform.localScale = Vector3.one * _maze.FinalScale;
-        }
-    }
+            foreach (var mp in mazeParts)
+            {
+                mp.transform.localScale = Vector3.one * _maze.FinalScale;
+            }
 
-    public override void OnStartLocalPlayer()
-    {
-        Debug.Log("start local player");
+            InitialStatus();
+        }
     }
 
     private void OnDestroy()
@@ -88,12 +110,14 @@ public class GameController : NetworkBehaviour {
 
         int numPowerUp = Mathf.FloorToInt(_maze.Size.x * _maze.Size.z / 3f);
         _powerUpItems.SpawnPowerupItems(numPowerUp);
+        serverSizeMazeReady = true;
     }
 
     public static void InitialStatus()
     {
         var positions = FindObjectsOfType<NetworkStartPosition>();
         s_spawnPositions = new List<Vector3>();
+        s_spawnPositionInUse = new List<Vector3>();
         foreach (var position in positions)
         {
             s_spawnPositions.Add(position.transform.position);

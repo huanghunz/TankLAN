@@ -37,13 +37,12 @@ public class SetupMaze : MonoBehaviour {
         go.transform.localRotation = Quaternion.identity;
 
         //this.transform.localScale = Vector3.one * this.FinalScale;
-        //_mazeInstance.GenerateInstantly();
+       
         StartCoroutine(_mazeInstance.GenerateEnumerator());
-
-        //StartCoroutine(this.ChangeSize());
-
+    
         _mazeInstance.OnMazeCreated += this.SpwanServerObjects;
-        //this.SpwanServerObject();
+        //_mazeInstance.GenerateInstantly();
+        //this.SpwanServerObjects();
     }
 
 
@@ -78,17 +77,19 @@ public class SetupMaze : MonoBehaviour {
         foreach (NetworkTransform child in allChildren)
         {
             NetworkServer.Spawn(child.gameObject);
-            child.transform.SetParent(_mazeInstance.transform);
+            //child.transform.SetParent(_mazeInstance.transform);
         }
 
         if (this.OnFinishGeneration != null)
         {
+            Debug.Log("finishe generation");
             this.OnFinishGeneration();
         }
     }
 
     private void SpwanServerObjects()
     {
+        Debug.Log("spwaning objects");
         StartCoroutine(this.ChangeSize());
     }
 }

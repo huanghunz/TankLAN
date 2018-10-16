@@ -28,6 +28,10 @@ public class LocalPlayer : NetworkBehaviour {
     [SyncVar (hook = "OnChangeHealth")]
     public int HealthValue = 100;
 
+    [SyncVar(hook = "OnChangeVisibilty")]
+    public bool Visible = true;
+
+
     [Command]
     public void CmdChangeName(string newName)
     {
@@ -55,13 +59,13 @@ public class LocalPlayer : NetworkBehaviour {
     [ClientRpc]
     public void RpcRespawn()
     {
-        if (!IsLocalPlayer) return;
+        if (!isLocalPlayer) return;
         this.transform.position = GameController.GetUniqueSpawnPosition();
     }
     
     public void AddDamage(int damage)
     {
-        if (!IsLocalPlayer) return;
+        //if (!isLocalPlayer) return;
         this.CmdChangeHealth(damage);
     }
 
@@ -78,6 +82,30 @@ public class LocalPlayer : NetworkBehaviour {
         _HUD.UpdateHealth(HealthValue);
     }
 
+    void OnChangeVisibilty(bool visible)
+    {
+        Visible = visible;
+        if (isLocalPlayer)
+        {
+            _HUD.SetVisible(true);
+            if (!visible && _isUsingOriginalMaterials)
+            {
+                this.SwapMaterials(false);
+                _isUsingOriginalMaterials = false;
+            }
+            if (visible && !_isUsingOriginalMaterials)
+            {
+                this.SwapMaterials(true);
+                _isUsingOriginalMaterials = true;
+            }
+        }
+        else
+        {
+            _HUD.SetVisible(visible);
+            _playerModel.SetActive(visible);
+        }
+    }
+
     void OnChangeName (string n)
     {
         PlayerName = n;
@@ -86,7 +114,7 @@ public class LocalPlayer : NetworkBehaviour {
 
     private void SetupPlayer()
     {
-        if (IsLocalPlayer)
+        if (isLocalPlayer)
         {
             // Server is ready.
             this.SetControllability(true);
@@ -100,27 +128,9 @@ public class LocalPlayer : NetworkBehaviour {
         this.OnPropertyChange();
     }
 
-    public void SetVisibility(bool visibleForOther)
+    public void SetVisibility(bool visible)
     {
-        if (IsLocalPlayer)
-        {
-            _HUD.SetVisible(true);
-            if (!visibleForOther && _isUsingOriginalMaterials)
-            {
-                this.SwapMaterials(false);
-                _isUsingOriginalMaterials = false;
-            }
-            if (visibleForOther && !_isUsingOriginalMaterials)
-            {
-                this.SwapMaterials(true);
-                _isUsingOriginalMaterials = true;
-            }
-        }
-        else
-        {
-            _playerModel.SetActive(visibleForOther);
-            _HUD.SetVisible(visibleForOther);
-        }
+        Visible = visible;
     }
 
     private void SwapMaterials(bool useOriginal)
@@ -170,7 +180,8 @@ public class LocalPlayer : NetworkBehaviour {
 
     public override void OnStartLocalPlayer()
     {
-        this.IsLocalPlayer = isLocalPlayer;
+        Debug.Log("on start local player");
+       // this.IsLocalPlayer = isLocalPlayer;
         //GameObject actual = Instantiate(this.PlayerPrefab, Vector3.zero, Quaternion.identity);
         //actual.transform.SetParent(this.transform);
         _HUD.IsLocalPlayer = isLocalPlayer;

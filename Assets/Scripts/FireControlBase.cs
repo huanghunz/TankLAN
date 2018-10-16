@@ -45,7 +45,7 @@ public class FireControlBase : NetworkBehaviour {
     void Update()
     {
         if (!isLocalPlayer) return;
-        var b = GetComponent<LocalPlayer>().isLocalPlayer;
+        
         if (this.NumBullet == 0 && !_isRefilling)
         {
             this.BulletCoolDown = REFILL_TIME;
