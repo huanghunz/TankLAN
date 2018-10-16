@@ -58,6 +58,9 @@ namespace Prototype.NetworkLobby
         [HideInInspector]
         public int _playerNumber = 0;
 
+        [HideInInspector]
+        public int _playerPrefabIdx = 0;
+
         //used to disconnect a client properly when exiting the matchmaker
         [HideInInspector]
         public bool _isMatchmaking = false;
@@ -348,20 +351,28 @@ namespace Prototype.NetworkLobby
             return true;
         }
 
-        public override GameObject OnLobbyServerCreateGamePlayer(
-                    NetworkConnection conn, short playerControllerId)
-        {
+        //public override GameObject OnLobbyServerCreateGamePlayer(
+        //            NetworkConnection conn, short playerControllerId)
+        //{
+        //    if (_playerPrefabIdx >= spawnPrefabs.Count)
+        //    {
+        //        Debug.Log("out of index");
+        //        return base.OnLobbyServerCreateGamePlayer(conn, playerControllerId);
+        //    }
 
-            Debug.Log("z222!!! player created " + SceneManager.GetActiveScene().name);
-            //GameObject _temp = (GameObject)GameObject.Instantiate(
-            //    spawnPrefabs[playerPrefabIndex],
-            //    startPositions[conn.connectionId].position,
-            //    Quaternion.identity);
+            
+        //    Debug.Log("z222!!! player created " + SceneManager.GetActiveScene().name + " _playerPrefabIdx: " + _playerPrefabIdx +
+        //        spawnPrefabs[_playerPrefabIdx].name);
+        //    GameObject _temp = (GameObject)GameObject.Instantiate(
+        //        spawnPrefabs[_playerPrefabIdx],
+        //        Vector3.zero,
+        //        Quaternion.identity);
 
-            //NetworkServer.AddPlayerForConnection(conn, _temp, playerControllerId);
-            //return _temp;
-            return base.OnLobbyServerCreateGamePlayer(conn, playerControllerId);
-        }
+        //    NetworkServer.ReplacePlayerForConnection(conn, _temp, playerControllerId);
+        //    //NetworkServer.AddPlayerForConnection(conn, _temp, playerControllerId);
+        //    return _temp;
+        //   // return base.OnLobbyServerCreateGamePlayer(conn, playerControllerId);
+        //}
 
         // --- Countdown management
 

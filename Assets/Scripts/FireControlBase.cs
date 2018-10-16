@@ -8,7 +8,7 @@ public class FireControlBase : NetworkBehaviour {
 
     public GameObject BulletPrefab;
     
-    public Transform BulletSpwanPoint;
+    public Transform[] BulletSpwanPoint;
 
     public float BulletForce = 400f;
 
@@ -67,18 +67,21 @@ public class FireControlBase : NetworkBehaviour {
         if (Input.GetKeyDown("space"))
         {
             this.CmdShoot(FireDamage);
-            this.NumBullet -= this.NumBullerPerShooting;
+            this.NumBullet -= (this.BulletSpwanPoint.Length * this.NumBullerPerShooting);
             this.PlayerUI.UpdateBulletCount(this.NumBullet);
         }
     }
 
     protected virtual void CreateBullet(int damage)
     {
-        for (int i = 0; i < this.NumBullerPerShooting; ++i)
+        for (int i = 0; i < this.BulletSpwanPoint.Length; ++i)
         {
-            GameObject bullet = Instantiate(this.BulletPrefab, this.BulletSpwanPoint.position, this.BulletSpwanPoint.rotation);
-            bullet.GetComponent<Rigidbody>().AddForce(this.BulletSpwanPoint.forward * this.BulletForce);
-            bullet.GetComponent<BulletBase>().BulletDamage = damage;
+            for (int j = 0; j < this.NumBullerPerShooting; ++j)
+            {
+                GameObject bullet = Instantiate(this.BulletPrefab, this.BulletSpwanPoint[i].position, this.BulletSpwanPoint[i].rotation);
+                bullet.GetComponent<Rigidbody>().AddForce(this.BulletSpwanPoint[i].forward * this.BulletForce);
+                bullet.GetComponent<BulletBase>().BulletDamage = damage;
+            }
         }
     }
 

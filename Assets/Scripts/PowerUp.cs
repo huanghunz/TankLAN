@@ -13,6 +13,9 @@ public class PowerUp : NetworkBehaviour
 
     public int _numPickedItems = 0;
 
+    private float RESPAWN_TIMER = 10f;
+    private float _respawnTimer = 0;
+
     private List<PowerUpItem> _powerupItems;
 
     Dictionary<LocalPlayer, Dictionary<string, float>> _playerPowerUp;
@@ -20,10 +23,19 @@ public class PowerUp : NetworkBehaviour
     private void Awake()
     {
         _playerPowerUp = new Dictionary<LocalPlayer, Dictionary<string, float>>();
+        _respawnTimer = RESPAWN_TIMER;
     }
 
     private void Update()
     {
+        _respawnTimer -= Time.deltaTime;
+        if (_respawnTimer <= 0)
+        {
+            _respawnTimer = RESPAWN_TIMER;
+            this.SpawnPowerupItems(this.NumberOfItems);
+        }
+
+
         if (_playerPowerUp.Count == 0) return;
 
         int count = _playerPowerUp.Count;
@@ -63,7 +75,7 @@ public class PowerUp : NetworkBehaviour
             Vector3 pos = GameController.GetUniqueSpawnPosition();
             item.transform.position = new Vector3(pos.x, 10f, pos.z);
             var powerUpitem = item.GetComponent<PowerUpItem>();
-            powerUpitem.PowerUpType = (int)PowerUpItem.Types.Invisible;// (PowerUpItem.Types)Random.Range(0, numTypes);
+            powerUpitem.PowerUpType = Random.Range(0, numTypes);
             NetworkServer.Spawn(item);
 
             _powerupItems.Add(powerUpitem);
@@ -83,6 +95,7 @@ public class PowerUp : NetworkBehaviour
         item.OnTriggerEntered -= this.OnPlayerTriggered;
         item.OnDestorySelf -= this.OnItemDestory;
     }
+
 
     private void OnDestroy()
     {

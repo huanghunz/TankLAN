@@ -38,6 +38,8 @@ namespace Prototype.NetworkLobby
         [SyncVar(hook = "OnMyModel")]
         public string playerModelName = "";
 
+        public int playerModelId;
+
 
         public Color OddRowColor = new Color(250.0f / 255.0f, 250.0f / 255.0f, 250.0f / 255.0f, 1.0f);
         public Color EvenRowColor = new Color(180.0f / 255.0f, 180.0f / 255.0f, 180.0f / 255.0f, 1.0f);
@@ -255,6 +257,19 @@ namespace Prototype.NetworkLobby
                 if (i == modelIdx)       Models[i].SetActive(true);
                 else                     Models[i].SetActive(false);
             }
+
+            playerModelId = System.Array.IndexOf(ModelNames, playerModelName);
+
+            //TODO: refactor this code to a single place so it does not need to be run on every client.
+            if (playerModelId >= 0 && playerModelId < LobbyManager.s_Singleton.spawnPrefabs.Count)
+            {
+                LobbyManager.s_Singleton.gamePlayerPrefab =
+                    LobbyManager.s_Singleton.spawnPrefabs[playerModelId];
+            }
+            else
+            {
+                Debug.LogWarning("Index out of range: " + playerModelId);
+            }
         }
 
         //===== UI Handler
@@ -366,9 +381,12 @@ namespace Prototype.NetworkLobby
 
             int inUseIdx = _modelInUse.IndexOf(idx);
 
+            int directoin = next ? 1 : -1;
+
             if (idx < 0) idx = 0;
 
-            idx = (idx + 1) % ModelNames.Length;
+            if (idx == 0 && !next) idx = 3;
+            idx = (idx + directoin) % ModelNames.Length;
 
             bool alreadyInUse = false;
             int count = ModelNames.Length;
@@ -381,7 +399,8 @@ namespace Prototype.NetworkLobby
                     if (_modelInUse[i] == idx)
                     {
                         alreadyInUse = true;
-                        idx = (idx + 1) % ModelNames.Length;
+                        if (idx == 0 && !next) idx = 3;
+                        idx = (idx + directoin) % ModelNames.Length;
                     }
                 }
             }

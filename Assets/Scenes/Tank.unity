@@ -980,7 +980,6 @@ MonoBehaviour:
   matchSize: 4
   isNetworkActive: 0
   matchMaker: {fileID: 0}
-  PlayerPrefabIndex: 0
 --- !u!4 &1675548513
 Transform:
   m_ObjectHideFlags: 0
@@ -1317,8 +1316,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MazePrefab: {fileID: 1000013859159830, guid: 5a3d63bddecdeba4e873ca69330c18b9, type: 2}
   Size:
-    x: 3
-    z: 3
+    x: 4
+    z: 4
   FinalScale: 10
   generateOnStart: 0
 --- !u!114 &2092150702

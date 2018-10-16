@@ -10,15 +10,11 @@ public class LocalPlayer : NetworkBehaviour {
     public GameObject PlayerPrefab;
 
     private GameObject _playerModel;
-    private Renderer[] _renderers;
+    private GameObject _playerGhost;
 
     private PlayerHUD _HUD;
 
-    public Material InvisibleVisual;
-    private Material[] _materialsOriginal;
-
     private bool _isPlayerSpawned;
-    private bool _isUsingOriginalMaterials = true;
     
     [SyncVar (hook = "OnChangeName")]
 	public string PlayerName = "player";
@@ -86,16 +82,18 @@ public class LocalPlayer : NetworkBehaviour {
         if (isLocalPlayer)
         {
             _HUD.SetVisible(true);
-            if (!visible && _isUsingOriginalMaterials)
-            {
-                this.SwapMaterials(false);
-                _isUsingOriginalMaterials = false;
-            }
-            if (visible && !_isUsingOriginalMaterials)
-            {
-                this.SwapMaterials(true);
-                _isUsingOriginalMaterials = true;
-            }
+            _playerModel.SetActive(visible);
+            _playerGhost.SetActive(!visible);
+            //if (!visible && _isUsingOriginalMaterials)
+            //{
+            //    this.SwapMaterials(false);
+            //    _isUsingOriginalMaterials = false;
+            //}
+            //if (visible && !_isUsingOriginalMaterials)
+            //{
+            //    this.SwapMaterials(true);
+            //    _isUsingOriginalMaterials = true;
+            //}
         }
         else
         {
@@ -131,27 +129,6 @@ public class LocalPlayer : NetworkBehaviour {
         Visible = visible;
     }
 
-    private void SwapMaterials(bool useOriginal)
-    {
-        if (useOriginal)
-        {
-            for (int i = 0; i < _renderers.Length; ++i)
-            {
-                _renderers[i].material = _materialsOriginal[i];
-            }
-
-            _isUsingOriginalMaterials = true;
-        }
-        else
-        {
-            for (int i = 0; i < _renderers.Length; ++i)
-            {
-                _renderers[i].material = this.InvisibleVisual;
-            }
-            _isUsingOriginalMaterials = false;
-        }
-    }
-
     private void SetControllability(bool control)
     {
         GetComponent<TankPlayerController>().enabled = control;
@@ -159,19 +136,17 @@ public class LocalPlayer : NetworkBehaviour {
 
     void Awake()
     {
+        Debug.Assert(transform.Find("Model") != null, "Fail to find object called 'Model'");
         _playerModel = transform.Find("Model").gameObject;
-        Debug.Assert(_playerModel != null, "Fail to find object called 'Model'");
-        _renderers = _playerModel.GetComponentsInChildren<Renderer>();
 
-        _materialsOriginal = new Material[_renderers.Length];
-        for (int i = 0; i < _renderers.Length; ++i)
-        {
-            _materialsOriginal[i] = new Material(_renderers[i].material);
-        }
+         _HUD = this.GetComponent<PlayerHUD>();
+        Debug.Assert(_HUD != null, "Fail to find component PlayerHUD");
 
-        _HUD = this.GetComponent<PlayerHUD>();
+        Debug.Assert(transform.Find("Ghost") != null, "Fail to find object called 'Ghost'");
+        _playerGhost = transform.Find("Ghost").gameObject;
 
         _playerModel.SetActive(false);
+        _playerGhost.SetActive(false);
         this.SetVisibility(false);
         this.SetControllability(false);
     }
