@@ -1415,7 +1415,7 @@ MonoBehaviour:
   BulletSpawnPositions:
   - {fileID: 4238510609246944}
   - {fileID: 4071380976083112}
-  NumBulletPerShooting: 2
+  NumBulletPerShooting: 1
   MaxNumBullet: 10
 --- !u!114 &114430872346897432
 MonoBehaviour:

@@ -8,8 +8,6 @@ public partial class LocalPlayer : NetworkBehaviour {
     // Local Player
     public GameObject Explosion;
 
-    public GameObject PlayerPrefab;
-
     private GameObject _playerModel;
     private GameObject _playerGhost;
 
@@ -25,6 +23,9 @@ public partial class LocalPlayer : NetworkBehaviour {
 
     [SyncVar(hook = "OnChangeVisibilty")]
     public bool Visible = true;
+
+    [SyncVar(hook = "OnModelIndexChange")]
+    public int PrefabIndex = 0;
 
 
     [Command]
@@ -76,6 +77,11 @@ public partial class LocalPlayer : NetworkBehaviour {
         if (!_isPlayerSpawned) return;
         HealthValue = n;
         _HUD.UpdateHealth(HealthValue);
+    }
+
+    void OnModelIndexChange(int idx)
+    {
+        PrefabIndex = idx;
     }
 
     void OnChangeVisibilty(bool visible)
@@ -152,13 +158,7 @@ public partial class LocalPlayer : NetworkBehaviour {
 	{
         if (!_isPlayerSpawned && GameController.IsMazeReady)
         {
-            if (this.PlayerPrefab == null)
-            {
-                Debug.LogError("nul lplayer prefab");
-                return;
-            }
-
-            GameObject actual = Instantiate(this.PlayerPrefab);
+            GameObject actual = Instantiate(NetworkManager.singleton.spawnPrefabs[PrefabIndex]);
             actual.transform.SetParent(this.transform);
             actual.transform.localPosition = Vector3.zero;
             actual.transform.localRotation = Quaternion.identity;

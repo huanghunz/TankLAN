@@ -10,7 +10,8 @@ public class NetworkLobbyHook : LobbyHook {
         LobbyPlayer lobby = lobbyPlayer.GetComponent<LobbyPlayer>();
         LocalPlayer player = gamePlayer.GetComponent<LocalPlayer>();
 
-        //player.PlayerName = lobby.playerName;
+        player.PlayerName = lobby.playerName;
+        player.PrefabIndex = lobby.playerModelId;
         //player.PlayerPrefab = LobbyManager.s_Singleton.spawnPrefabs[lobby.playerModelId];
 
         //Debug.Log("HOOKKKK?? : " + player.PlayerPrefab + " lobby.playerModelId: " + lobby.playerModelId
