@@ -13,8 +13,8 @@ public class PowerUp : NetworkBehaviour
 
     public int _numPickedItems = 0;
 
-    private float RESPAWN_TIMER = 10f;
-    private float _respawnTimer = 0;
+    //private float RESPAWN_TIMER = 10f;
+    //private float _respawnTimer = 0;
 
     private List<PowerUpItem> _powerupItems;
 
@@ -23,7 +23,7 @@ public class PowerUp : NetworkBehaviour
     private void Awake()
     {
         _playerPowerUp = new Dictionary<LocalPlayer, Dictionary<string, float>>();
-        _respawnTimer = RESPAWN_TIMER;
+     //   _respawnTimer = RESPAWN_TIMER;
     }
 
     private void Update()
@@ -127,7 +127,7 @@ public class PowerUp : NetworkBehaviour
                 localPlayer.SetVisibility(false);
                 break;
             case PowerUpItem.Types.TopDownView:
-                TopDownViewCamera.ENABLE_VIEW = true;
+                localPlayer.EnableMap = true;
                 break;
         }
 
@@ -149,7 +149,7 @@ public class PowerUp : NetworkBehaviour
         switch (type)
         {
             case "TopDownView":
-                TopDownViewCamera.ENABLE_VIEW = false;
+                player.EnableMap = false;
                 break;
             case "Invisible":
                 player.SetVisibility(true);

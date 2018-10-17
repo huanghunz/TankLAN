@@ -13,7 +13,7 @@ public class Bullet : BulletBase {
                 .AddDamage(-this.BulletDamage);
 
             Vector3 force = collision.transform.position - this.transform.position;
-            force.y = 0;
+            force = new Vector3(force.x, 0, force.z);
             collision.transform.GetComponent<Rigidbody>().AddForce(force.normalized * 200f);
         }
 

@@ -27,6 +27,8 @@ public partial class LocalPlayer : NetworkBehaviour {
     [SyncVar(hook = "OnModelIndexChange")]
     public int PrefabIndex = 0;
 
+    [SyncVar(hook = "OnChangeMapEnable")]
+    public bool EnableMap = false;
 
     [Command]
     public void CmdChangeName(string newName)
@@ -77,6 +79,15 @@ public partial class LocalPlayer : NetworkBehaviour {
         if (!_isPlayerSpawned) return;
         HealthValue = n;
         _HUD.UpdateHealth(HealthValue);
+    }
+
+    void OnChangeMapEnable(bool enabled)
+    {
+        if (isLocalPlayer)
+        {
+            EnableMap = enabled;
+            FindObjectOfType<TopDownViewCamera>().EnableView = enabled;
+        }
     }
 
     void OnModelIndexChange(int idx)
