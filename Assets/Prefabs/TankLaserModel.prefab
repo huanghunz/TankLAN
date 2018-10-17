@@ -1411,7 +1411,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   BulletPrefab: {fileID: 1868044754807370, guid: c9ba3455bb3989044a21156f706d3d86,
     type: 2}
-  BulletForces: 750
+  BulletForces: 1000
   BulletSpawnPositions:
   - {fileID: 4238510609246944}
   - {fileID: 4071380976083112}
