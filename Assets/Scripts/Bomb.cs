@@ -29,9 +29,6 @@ public class Bomb : BulletBase {
         });
 
         TankUtility.Utility.Instance.AnimateAlpha(_bombRange, 0.5f, _exposeTime);
-        //StartCoroutine(this.UpdateRange(_exposeTime, Vector3.one * 4f));
-
-        //Invoke("Expose", _exposeTime);
     }
 
     private void OnTriggerEnter(Collider other)

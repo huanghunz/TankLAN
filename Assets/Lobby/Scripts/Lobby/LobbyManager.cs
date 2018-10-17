@@ -345,30 +345,6 @@ namespace Prototype.NetworkLobby
 
             return true;
         }
-
-        //public override GameObject OnLobbyServerCreateGamePlayer(
-        //            NetworkConnection conn, short playerControllerId)
-        //{
-        //    if (_playerPrefabIdx >= spawnPrefabs.Count)
-        //    {
-        //        Debug.Log("out of index");
-        //        return base.OnLobbyServerCreateGamePlayer(conn, playerControllerId);
-        //    }
-
-            
-        //    Debug.Log("z222!!! player created " + SceneManager.GetActiveScene().name + " _playerPrefabIdx: " + _playerPrefabIdx +
-        //        spawnPrefabs[_playerPrefabIdx].name);
-        //    GameObject _temp = (GameObject)GameObject.Instantiate(
-        //        spawnPrefabs[_playerPrefabIdx],
-        //        Vector3.zero,
-        //        Quaternion.identity);
-
-        //    NetworkServer.ReplacePlayerForConnection(conn, _temp, playerControllerId);
-        //    //NetworkServer.AddPlayerForConnection(conn, _temp, playerControllerId);
-        //    return _temp;
-        //   // return base.OnLobbyServerCreateGamePlayer(conn, playerControllerId);
-        //}
-
         // --- Countdown management
 
         public override void OnLobbyServerPlayersReady()
@@ -450,37 +426,5 @@ namespace Prototype.NetworkLobby
             ChangeTo(mainMenuPanel);
             infoPanel.Display("Client error : " + (errorCode == 6 ? "timeout" : errorCode.ToString()), "Close", null);
         }
-
-        //public override GameObject OnLobbyServerCreateGamePlayer(
-        //            NetworkConnection conn, short playerControllerId)
-        //{
-
-
-        //    if (!_playerModelRecord.ContainsKey(playerControllerId))
-        //    {
-        //        Debug.LogError("Fail to find id: " + playerControllerId);
-        //        return base.OnLobbyServerCreateGamePlayer(conn, playerControllerId);
-        //    }
-        //    GameObject go = base.OnLobbyServerCreateGamePlayer(conn, playerControllerId);
-        //    if (go != null)
-        //    {
-        //        Debug.Log(go.name);
-        //    }
-        //    else
-        //    {
-        //        Debug.Log("null go");
-        //    }
-
-        //    int modelIdx = _playerModelRecord[playerControllerId];
-
-        //    Debug.Log("connid: " + conn.connectionId + "  playerControllerId: " + playerControllerId + " modelId: " + modelIdx + " spawnPrefabs[modelIdx]" + spawnPrefabs[modelIdx].name);
-        //    GameObject _temp = (GameObject)GameObject.Instantiate(
-        //        spawnPrefabs[modelIdx],
-        //        Vector3.zero,
-        //        Quaternion.identity);
-
-        //    NetworkServer.AddPlayerForConnection(conn, _temp, playerControllerId);
-        //    return _temp;
-        //}
     }
 }

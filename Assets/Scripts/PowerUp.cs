@@ -13,9 +13,6 @@ public class PowerUp : NetworkBehaviour
 
     public int _numPickedItems = 0;
 
-    //private float RESPAWN_TIMER = 10f;
-    //private float _respawnTimer = 0;
-
     private List<PowerUpItem> _powerupItems;
 
     Dictionary<LocalPlayer, Dictionary<string, float>> _playerPowerUp;
@@ -23,19 +20,10 @@ public class PowerUp : NetworkBehaviour
     private void Awake()
     {
         _playerPowerUp = new Dictionary<LocalPlayer, Dictionary<string, float>>();
-     //   _respawnTimer = RESPAWN_TIMER;
     }
 
     private void Update()
     {
-        //_respawnTimer -= Time.deltaTime;
-        //if (_respawnTimer <= 0)
-        //{
-        //    _respawnTimer = RESPAWN_TIMER;
-        //    this.SpawnPowerupItems(this.NumberOfItems);
-        //}
-
-
         if (_playerPowerUp.Count == 0) return;
 
         int count = _playerPowerUp.Count;
