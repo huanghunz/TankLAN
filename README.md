@@ -1,6 +1,10 @@
 # TankLAN
 
+<<<<<<< HEAD
 ##Control
+=======
+## Control
+>>>>>>> 52648f4946a3235313892c5697158b1df0eb5edc
 
 WASD for movement;
 
@@ -28,4 +32,8 @@ Tank 1: https://poly.google.com/view/aU53_s3KlI9
 
 Tank 2: https://poly.google.com/view/19O5BtVYhiE
 
+<<<<<<< HEAD
 Tank 3: https://poly.google.com/view/c_jS3__7Do-
+=======
+Tank 3: https://poly.google.com/view/c_jS3__7Do-
+>>>>>>> 52648f4946a3235313892c5697158b1df0eb5edc
