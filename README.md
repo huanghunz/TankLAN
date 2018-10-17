@@ -1,6 +1,6 @@
 # TankLAN
 
-##Control
+## Control
 
 WASD for movement;
 
