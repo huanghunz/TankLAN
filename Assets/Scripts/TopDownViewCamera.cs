@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class TopDownViewCamera : MonoBehaviour {
 
-    public static bool ENABLE_VIEW;
+    public bool EnableView;
     public GameObject ViewUI;
     public SetupMaze Maze;
 
@@ -15,7 +15,6 @@ public class TopDownViewCamera : MonoBehaviour {
         _topDownCam = this.GetComponent<Camera>();
         if (Maze == null)
         {
-            Debug.Log("Null MMMMMMAAAAZZZE ???");
             return;
         }
         _topDownCam.orthographicSize = (int)(Maze.FinalScale * 1.5) + 1;
@@ -23,9 +22,9 @@ public class TopDownViewCamera : MonoBehaviour {
 
     private void Update()
     {
-        if (_topDownCam.enabled != ENABLE_VIEW)
+        if (_topDownCam.enabled != EnableView)
         {
-            this.SetVisible(ENABLE_VIEW);
+            this.SetVisible(EnableView);
         }
     }
 

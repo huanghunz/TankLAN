@@ -4,27 +4,26 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 
-public class FireControlBase : NetworkBehaviour {
+public partial class LocalPlayer : NetworkBehaviour {
 
+    // Fire control
     public GameObject BulletPrefab;
-    
+
     public Transform[] BulletSpwanPoint;
 
     public float BulletForce = 400f;
 
-    protected int FireDamage = 5;
+    public int FireDamage = 5;
 
     public int MaxNumBullet = 10;
 
-    public int NumBullerPerShooting = 1; 
+    public int NumBullerPerShooting = 1;
 
-    protected int NumBullet = 0;
-    protected float BulletCoolDown = 3f;
+    private int _numBullet = 0;
+    private float _bulletCoolDown = 3f;
+    private bool _isRefilling;
 
-    protected PlayerHUD PlayerUI;
-    protected bool _isRefilling;
-
-    protected const float REFILL_TIME = 3f;
+    private const float REFILL_TIME = 3f;
 
     [Command]
     protected void CmdShoot(int damage)
@@ -36,25 +35,21 @@ public class FireControlBase : NetworkBehaviour {
     {
         this.CreateBullet(damage);
     }
-
-    private void Awake()
-    {
-        this.PlayerUI = this.GetComponent<PlayerHUD>();
-    }
-
-    void Update()
+    
+    private void UpdateFireControl()
     {
         if (!isLocalPlayer) return;
-        
-        if (this.NumBullet == 0 && !_isRefilling)
+        if (!_enableControl) return;
+
+        if (_numBullet == 0 && !_isRefilling)
         {
-            this.BulletCoolDown = REFILL_TIME;
+            _bulletCoolDown = REFILL_TIME;
             _isRefilling = true;
             StartCoroutine(this.RefillBullet(REFILL_TIME));
         }
 
-        this.BulletCoolDown -= Time.deltaTime;
-        if (this.BulletCoolDown >= 0)
+        _bulletCoolDown -= Time.deltaTime;
+        if (_bulletCoolDown >= 0)
         {
             return;
         }
@@ -67,8 +62,8 @@ public class FireControlBase : NetworkBehaviour {
         if (Input.GetKeyDown("space"))
         {
             this.CmdShoot(FireDamage);
-            this.NumBullet -= (this.BulletSpwanPoint.Length * this.NumBullerPerShooting);
-            this.PlayerUI.UpdateBulletCount(this.NumBullet);
+            _numBullet -= (this.BulletSpwanPoint.Length * this.NumBullerPerShooting);
+            _HUD.UpdateBulletCount(_numBullet);
         }
     }
 
@@ -92,12 +87,12 @@ public class FireControlBase : NetworkBehaviour {
         while(elapsed < 1)
         {
             elapsed += Time.deltaTime / time;
-            int count = Mathf.FloorToInt(elapsed * 10);
-            this.PlayerUI.UpdateBulletCount(count);
+            int count = Mathf.FloorToInt(elapsed * this.MaxNumBullet);
+            _HUD.UpdateBulletCount(count);
             yield return delay;
         }
 
-        this.NumBullet = 10;
+        _numBullet = this.MaxNumBullet;
         _isRefilling = false;
     }
 }
